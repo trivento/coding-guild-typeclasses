@@ -73,8 +73,8 @@ object SemigroupEx2 extends App with Data  {
   }
 
   println(s"2. New balance ${add(balance, salary)}")
-  println(s"2. New balance ${add(balances, salaries){case (a: Money, b: Money) => add(a,b)}}")
-  println(s"2. New marbles ${add(marbles, won){case (a: Int, b: Int) => a + b}}")
+  //println(s"2. New balance ${add(balances, salaries){case (a: Money, b: Money) => add(a,b)}}")
+  //println(s"2. New marbles ${add(marbles, won){case (a: Int, b: Int) => a + b}}")
 }
 
 object SemigroupEx3 extends App with Data  {
