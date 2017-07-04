@@ -24,24 +24,96 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>CATS</section>
+				<section>
+          <h1>CATS</h1>
+          <h5>Lightweight, modular, and extensible library for functional programming</h5>
+        </section>
         <section>
-          <h2>Overview</h2>
+          <h1>Community</h1>
           <ul>
-            <li></li>
-            <li>Cats vs Scalaz</li>
+            <li>Great documentation</li>
+            <li>No symbols (e.g. <code>|@| <$></code> etc.)</li>
           </ul>
         </section>
         <section>
           <section>
-            <h2>Semigroup</h2>
+            <h1>Simulacrum / Machinist</h1>
+            <code>Simulacrum and Machinist provide us with handy typeclass and ops enrichment.</code>
+            <pre>
+              <code data-trim data-noescape>
+import simulacrum._
+
+@typeclass trait Appender[A] {
+  @op("|+|") def append(x: A, y: A): A
+}
+              </code>
+            </pre>
           </section>
           <section>
-            <h2>Monoid</h2>
+            <pre>
+              <code data-trim data-noescape>
+import Appender.ops._
+
+object Main extends App {
+  implicit val appenderInt: Appender[Int] = new Appender[Int] {
+    def append(x: Int, y: Int) = x + y
+  }
+
+  println(1 |+| 2)
+}
+              </code>
+            </pre>
+            <pre>
+              <code data-trim data-noescape>
+/usr/lib/jvm/java-8-oracle/bin/java ...
+Connected to the target VM, address: '127.0.0.1:45795', transport: 'socket'
+3
+Disconnected from the target VM, address: '127.0.0.1:45795', transport: 'socket'
+
+Process finished with exit code 0
+              </code>
+            </pre>
           </section>
         </section>
-
-				<section>Slide 2</section>
+        <section>
+          <h1>Core typeclasses</h1>
+          <img alt="" src="img/category_theory.png"/>
+        </section>
+        <section>
+          <h1>Today</h1>
+          <ul>
+            <li>Semigroup</li>
+            <li>Monoid</li>
+            <li>Traversable</li>
+            <li>Foldable</li>
+            <li>Functor</li>
+          </ul>
+        </section>
+        <section>
+          <section>
+            <h1>Semigroup</h1>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1>Monoid</h1>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1>Traversable</h1>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1>Foldable</h1>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1>Functor</h1>
+          </section>
+        </section>
 			</div>
 		</div>
 
