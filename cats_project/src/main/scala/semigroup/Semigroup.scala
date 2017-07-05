@@ -4,9 +4,9 @@ import cats.Semigroup
 import cats.instances.map._
 import cats.instances.int._
 
-trait Data {
-  case class Money(euros: Int, cents: Int)
+case class Money(euros: Int, cents: Int)
 
+trait Data {
   val balance: Money = Money(987, 85)
   val salary: Money = Money(834, 78)
 
@@ -31,7 +31,6 @@ trait Data {
   )
 
 }
-
 
 object SemigroupEx1 extends App with Data {
 
@@ -86,7 +85,7 @@ object SemigroupEx3 extends App with Data  {
     override def add(a: Int, b: Int): Int = a + b
   }
   implicit val moneyAddable = new Addable[Money] {
-    override def add(money: Money, other: Money): SemigroupEx3.Money =
+    override def add(money: Money, other: Money): Money =
       Money(money.euros + other.euros + ((money.cents + other.cents) / 100), (money.cents + other.cents) % 100)
   }
   implicit def mapAddable[K, V: Addable] = new Addable[Map[K,V]] {
@@ -104,7 +103,7 @@ object SemigroupEx3 extends App with Data  {
 
 object SemigroupEx4 extends App with Data  {
 
-  implicit val semigroup = new Semigroup[Money] {
+  implicit val moneySemigroup = new Semigroup[Money] {
     override def combine(x: Money, y: Money): Money =
       Money(x.euros + y.euros + ((x.cents + y.cents) / 100), (x.cents + y.cents) % 100)
   }
@@ -114,6 +113,20 @@ object SemigroupEx4 extends App with Data  {
   println(s"4. New balance ${Semigroup[Map[String,Money]].combine(balances, salaries)}")
   println(s"4. New balance ${Semigroup[Map[String,Int]].combine(marbles, won)}")
 
+}
+
+
+object SemigroupEx5 extends App with Data {
+  import cats.syntax.semigroup._
+
+  println(marbles |+| won)
+}
+
+object SemigroupEx6 extends App with Data {
+  import cats.syntax.semigroup._
+  import SemigroupEx4.moneySemigroup
+
+  println(balances |+| salaries)
 }
 /*
      New balance Money(1822,63)
