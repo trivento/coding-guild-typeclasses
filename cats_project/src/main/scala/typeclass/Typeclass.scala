@@ -41,6 +41,8 @@ object SimpleMethodsOverloading extends NamePrintingApp with Data {
   *   - define an interface with function for the type
   *   - define function that takes type plus function to perform operation
   *
+  *   (pattern is called Parameteric Polymorphism, as opposed to Inheritance Polymorphism)
+  *
   *****************************************************************************/
 trait NoiseProducing[T] {
   def makeNoise(t: T): String
@@ -106,4 +108,3 @@ object All extends NamePrintingApp {
   KickingMakesNoise.main(Array.empty)
   MaybeKickingSomething.main(Array.empty)
 }
-
