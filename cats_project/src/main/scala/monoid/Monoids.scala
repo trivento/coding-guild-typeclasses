@@ -88,7 +88,7 @@ object AbstractExample extends NamePrintingApp with Data {
   *
   * So Monoid is a Semigroup with an empty definition. Or more formally:
   *
-  * A binary associative binary operation and an identity element.
+  * A associative binary operation and an identity element.
   *
   * Identity:
   *   - Monoid[T].combine(a: T, Monoid[T].empty) == a

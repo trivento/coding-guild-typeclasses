@@ -34,7 +34,7 @@ object SimpleMethodsOverloading extends NamePrintingApp with Data {
 //==============================================================================
 
 /*******************************************************************************
-  * Above code doens't scale
+  * Above code doens't scale and isn't extendible by outside world
   * Let's make it more generic
   *
   * Abstract by:

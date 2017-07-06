@@ -79,9 +79,9 @@ object BalanceExample extends NamePrintingApp with Data {
 //==============================================================================
 //==============================================================================
 
-/**
+/*******************************************************************************
   * Adding maps seems to be generic. Let's abstract that away
-  */
+  *****************************************************************************/
 object GenericAddBalanceExample extends NamePrintingApp with Data  {
 
   def add(money: Money, other: Money): Money =
@@ -111,9 +111,9 @@ object GenericAddBalanceExample extends NamePrintingApp with Data  {
 //==============================================================================
 //==============================================================================
 
-/**
+/*******************************************************************************
   * Let's use implicits for the Addable
-  */
+  *****************************************************************************/
 object ImplicitsGenericAddBalanceExample extends NamePrintingApp with Data  {
   trait Addable[T] {
     def add(a: T, b: T): T
@@ -178,7 +178,7 @@ object CatsGenericAddBalanceExample extends NamePrintingApp with Data  {
     ***************************************************************************/
   implicit val moneySemigroup = new Semigroup[Money] {
     override def combine(x: Money, y: Money): Money =
-    Money(x.euros + y.euros + ((x.cents + y.cents) / 100), (x.cents + y.cents) % 100)
+      Money(x.euros + y.euros + ((x.cents + y.cents) / 100), (x.cents + y.cents) % 100)
   }
 
   /*****************************************************************************
