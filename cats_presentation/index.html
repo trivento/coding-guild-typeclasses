@@ -1,45 +1,70 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+    <title>reveal.js</title>
 
-		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css">
+    <link rel="stylesheet" href="css/presentation.css">
 
-		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
 
-		<!-- Printing and PDF exports -->
-		<script>
-		 var link = document.createElement( 'link' );
-		 link.rel = 'stylesheet';
-		 link.type = 'text/css';
-		 link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-		 document.getElementsByTagName( 'head' )[0].appendChild( link );
-		</script>
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>
-          <h1>CATS</h1>
-          <h4>Lightweight, modular, and extensible library for functional programming</h4>
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section>
+            <h2>FP Concepts</h2>
         </section>
         <section>
-          <h1>Community</h1>
-          <ul>
-            <li>Great documentation</li>
-            <li>No symbols (e.g. <code>|@| <$></code> etc.)</li>
-          </ul>
+            <h2>Overview</h2>
+            <ul>
+                <li>Cats</li>
+                <li>Code
+                <ul>
+                    <li>Typeclasses</li>
+                    <li>Semigroup</li>
+                    <li>Monoid</li>
+                </ul>
+                </li>
+            </ul>
         </section>
         <section>
-          <section>
-            <h1>Simulacrum / Machinist</h1>
-            <code>Simulacrum and Machinist provide us with handy typeclass and ops enrichment.</code>
-            <pre>
+            <section>
+                <div class="wrap"><span class="icon-wrapper">&nbsp;</span><span id="catstitle">Cats</span></div>
+                <h4>Lightweight, modular, and extensible library for functional
+                    programming</h4>
+            </section>
+            <section>
+                <h1>Community</h1>
+                <ul>
+                    <li>Great documentation</li>
+                    <li>Possible without symbols (e.g. <code>|@| <$></code> etc.)</li>
+                </ul>
+            </section>
+        </section>
+        <section>
+            <h1>CODE</h1>
+        </section>
+        <section>
+            <section>
+                <h3>Simulacrum / Machinist</h3>
+                <code>Simulacrum and Machinist provide us with handy typeclass
+                    and ops enrichment.</code>
+                <pre>
               <code data-trim data-noescape>
 import simulacrum._
 
@@ -48,8 +73,8 @@ import simulacrum._
 }
               </code>
             </pre>
-          </section>
-          <section>
+            </section>
+            <section>
             <pre>
               <code data-trim data-noescape>
 import Appender.ops._
@@ -63,7 +88,7 @@ object Main extends App {
 }
               </code>
             </pre>
-            <pre>
+                <pre>
               <code data-trim data-noescape>
 /usr/lib/jvm/java-8-oracle/bin/java ...
 Connected to the target VM, address: '127.0.0.1:45795', transport: 'socket'
@@ -121,74 +146,81 @@ object Semigroup {
 }
               </code>
             </pre>
-          </section>
-        </section>
-        <section>
-          <h1>Core typeclasses</h1>
-          <img alt="" src="img/category_theory.png"/>
-        </section>
-        <section>
-          <h1>Today</h1>
-          <ul>
-            <li>Semigroup</li>
-            <li>Monoid</li>
-            <li>Traversable</li>
-            <li>Foldable</li>
-            <li>Functor</li>
-          </ul>
-        </section>
-        <section>
-          <section>
-            <h1>Semigroup</h1>
-            <h4>If a type <u>A</u> can form a <u>Semigroup</u> it has an <u>associative</u> binary operation.</h4>
-          </section>
-          <section>
-            <section>
-              <h1>Associativity</h1>
-              <h2>(1 + 2) + 3 = 1 + (2 + 3)</h2>
-              <h2>(1 * 2) * 3 = 1 * (2 * 3)</h2>
             </section>
-          </section>
         </section>
         <section>
-          <section>
-            <h1>Monoid</h1>
+            <h1>Core typeclasses</h1>
+            <img alt="" src="img/category_theory.png"/>
+        </section>
+        <section>
+            <h1>Today</h1>
+            <ul>
+                <li>Semigroup</li>
+                <li>Monoid</li>
+                <li>Traversable</li>
+                <li>Foldable</li>
+                <li>Functor</li>
+            </ul>
+        </section>
+        <section>
+            <section>
+                <h1>Semigroup</h1>
+                <h4>If a type <u>A</u> can form a <u>Semigroup</u> it has an <u>associative</u>
+                    binary operation.</h4>
+            </section>
+            <section>
+                <section>
+                    <h1>Associativity</h1>
+                    <h2>(1 + 2) + 3 = 1 + (2 + 3)</h2>
+                    <h2>(1 * 2) * 3 = 1 * (2 * 3)</h2>
+                </section>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h1>Monoid</h1>
             <h4>Monoid extends the power of Semigroup by providing an additional empty value.</h4>
           </section>
         </section>
         <section>
-          <section>
-            <h1>Traversable</h1>
-          </section>
+            <section>
+                <h1>Traversable</h1>
+            </section>
         </section>
         <section>
-          <section>
-            <h1>Foldable</h1>
-          </section>
+            <section>
+                <h1>Foldable</h1>
+            </section>
         </section>
         <section>
-          <section>
-            <h1>Functor</h1>
-          </section>
+            <section>
+                <h1>Functor</h1>
+            </section>
         </section>
-			</div>
-		</div>
+    </div>
+</div>
 
-		<script src="lib/js/head.min.js"></script>
-		<script src="js/reveal.js"></script>
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
 
-		<script>
-		 // More info about config & dependencies:
-			      // - https://github.com/hakimel/reveal.js#configuration
-		 // - https://github.com/hakimel/reveal.js#dependencies
-		 Reveal.initialize({
-			 dependencies: [
-				 { src: 'plugin/markdown/marked.js' },
-				 { src: 'plugin/markdown/markdown.js' },
-				 { src: 'plugin/notes/notes.js', async: true },
-				 { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-			 ]
-		 });
-		</script>
-	</body>
+<script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {
+                src: 'plugin/highlight/highlight.js',
+                async: true,
+                callback: function () {
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+</script>
+</body>
 </html>

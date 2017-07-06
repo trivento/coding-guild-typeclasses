@@ -1,30 +1,38 @@
 package semigroup
 
-import cats.Semigroup
-import cats.instances.map._
-import cats.instances.int._
-
+/**
+  * DOMAIN
+  */
 case class Money(euros: Int, cents: Int)
 
+/**
+  * Data we use in examples below
+  */
 trait Data {
+  println(s"---- ${this.getClass.getSimpleName.replace('$', ' ')} ----")
+
   val balance: Money = Money(987, 85)
   val salary: Money = Money(834, 78)
 
+  // How many marbles has each Person
   val marbles: Map[String, Int] = Map(
     "John" -> 6,
     "Sara" -> 9
   )
 
+  // How many marbles did each person win
   val won: Map[String, Int] = Map(
     "Sara" -> 2,
     "Mo" -> 5
   )
 
+  // Current balance of each person
   val balances: Map[String, Money] = Map(
     "John" -> Money(987, 85),
     "Sara" -> Money(1234, 98)
   )
 
+  // Salary of each person
   val salaries: Map[String, Money] = Map(
     "Sara" -> Money(200, 90),
     "Mo" -> Money(4987,43)
@@ -32,11 +40,22 @@ trait Data {
 
 }
 
-object SemigroupEx1 extends App with Data {
+//========================================================================================
+//========================================================================================
+//========================================================================================
 
+/**
+  * We want to add 2 money objects
+  * We want to add 2 maps with money in it for each person
+  * We want to add 2 maps with #marbles in it for each person
+  */
+object BalanceExample extends App with Data {
+
+  // Function to add 2 money objects to each other
   def add(money: Money, other: Money): Money =
     Money(money.euros + other.euros + ((money.cents + other.cents) / 100), (money.cents + other.cents) % 100)
 
+  // Due to type erasure we need 2 functions for the maps
   def addMoneyMap(balances: Map[String, Money], salaries: Map[String, Money]): Map[String, Money] = {
     balances.foldLeft(salaries){
       case (acc, (name, money)) =>
@@ -55,7 +74,14 @@ object SemigroupEx1 extends App with Data {
   println(s"1. New marbles ${addMarbleMap(marbles, won)}")
 }
 
-object SemigroupEx2 extends App with Data  {
+//========================================================================================
+//========================================================================================
+//========================================================================================
+
+/**
+  * Adding maps seems to be generic. Let's abstract that away
+  */
+object GenericAddBalanceExample extends App with Data  {
 
   def add(money: Money, other: Money): Money =
     Money(money.euros + other.euros + ((money.cents + other.cents) / 100), (money.cents + other.cents) % 100)
@@ -64,19 +90,30 @@ object SemigroupEx2 extends App with Data  {
     def add(a: T, b: T): T
   }
 
-  def add[X, Y](balances: Map[X, Y], salaries: Map[X, Y])(addable: Addable[Y]): Map[X, Y] = {
-    salaries.foldLeft(balances){
-      case (acc, (name, money)) =>
-        acc + (name -> acc.get(name).map(addable.add(_, money)).getOrElse(money))
+  // now we can use the same name, because type erasure is no longer playing parts
+  // Add two maps to each other
+  def add[X, Y](balances: Map[X, Y], addMap: Map[X, Y])(addable: Addable[Y]): Map[X, Y] = {
+    addMap.foldLeft(balances){
+      case (acc, (name, plus)) =>
+        acc + (name -> acc.get(name).map(addable.add(_, plus)).getOrElse(plus))
     }
   }
 
   println(s"2. New balance ${add(balance, salary)}")
-  println(s"2. New balance ${add(balances, salaries){case (a: Money, b: Money) => add(a,b)}}")
-  println(s"2. New marbles ${add(marbles, won){case (a: Int, b: Int) => a + b}}")
+  // With explicit Addable for money
+  println(s"2. New balance ${add(balances, salaries){(a: Money, b: Money) => add(a,b)}}")
+  // With explicit Addable for Int
+  println(s"2. New marbles ${add(marbles, won){(a: Int, b: Int) => a + b}}")
 }
 
-object SemigroupEx3 extends App with Data  {
+//========================================================================================
+//========================================================================================
+//========================================================================================
+
+/**
+  * Let's use implicits for the Addable
+  */
+object ImplicitsGenericAddBalanceExample extends App with Data  {
   trait Addable[T] {
     def add(a: T, b: T): T
   }
@@ -84,10 +121,12 @@ object SemigroupEx3 extends App with Data  {
   implicit val intAddable = new Addable[Int] {
     override def add(a: Int, b: Int): Int = a + b
   }
-  implicit val moneyAddable = new Addable[Money] {
-    override def add(money: Money, other: Money): Money =
+
+  // BONUS: Nice 2.12 trick for implementing single method interface
+  implicit val moneyAddable: Addable[Money] = { (money, other) =>
       Money(money.euros + other.euros + ((money.cents + other.cents) / 100), (money.cents + other.cents) % 100)
   }
+
   implicit def mapAddable[K, V: Addable] = new Addable[Map[K,V]] {
     override def add(a: Map[K, V], b: Map[K, V]): Map[K, V] =
       a.foldLeft(b){
@@ -96,41 +135,115 @@ object SemigroupEx3 extends App with Data  {
       }
   }
 
-  println(s"3. New balance ${implicitly[Addable[Money]].add(balance, salary)}")
-  println(s"3. New balance ${implicitly[Addable[Map[String, Money]]].add(balances, salaries)}")
-  println(s"3. New marbles ${implicitly[Addable[Map[String, Int]]].add(marbles, won)}")
+  /**
+    * Generic add function which can add anything as long as an Addable of it
+    * is in implicit scope (or explicitly passed)
+    */
+  def add[A: Addable](a: A, b: A): A = implicitly[Addable[A]].add(a, b)
+
+  println(s"3. New balance ${add(balance, salary)}")
+  println(s"3. New balance ${add(balances, salaries)}")
+  println(s"3. New marbles ${add(marbles, won)}")
 }
 
-object SemigroupEx4 extends App with Data  {
+//========================================================================================
+//========================================================================================
+//========================================================================================
+
+/**
+  * Let's use FP concepts with Cats
+  */
+
+
+/******************************************************************************
+  * What did we do so far?
+  *
+  *  - Defined an Addable interface
+  *  - Created instances of the Addable interface
+  *
+  * In FP we have SemiGroup
+  * Semigroup defines an associative binary operation
+  *
+  * trait Semigroup[A] {
+  *   def combine(x: A, y: A): A
+  * }
+  *
+  ******************************************************************************/
+object CatsGenericAddBalanceExample extends App with Data  {
+  import cats.Semigroup
+
+  /**
+    * Let's define a Semigroup to combine (add) 2 money objects
+    */
+  implicit val moneySemigroup = new Semigroup[Money] {
+    override def combine(x: Money, y: Money): Money =
+    Money(x.euros + y.euros + ((x.cents + y.cents) / 100), (x.cents + y.cents) % 100)
+  }
+
+  /**
+    * There are definitions for Int for free!
+    */
+  import cats.instances.int._
+  Semigroup[Int].combine(1, 2)
+
+  /**
+    * And also for Map!
+    */
+  import cats.instances.map._
+
+  // before: def add[A: Addable](a: A, b: A): A = implicitly[Addable[A]].add(a, b)
+  def add[A: Semigroup](a: A, b: A): A = implicitly[Semigroup[A]].combine(a, b)
+
+  println(s"4. New balance ${add(balance, salary)}")
+  println(s"4. New balance ${add(balances, salaries)}")
+  println(s"4. New balance ${add(marbles, won)}")
+
+}
+
+//========================================================================================
+//========================================================================================
+//========================================================================================
+
+/**
+  * It is also possible to use symbols
+  * |+| is something like:
+  *
+  * implicit class SemigroupOps[A: Semigroup](lhs: A) {
+  *   def combine(rhs: A): A = implicitly[Semigroup[A]].combine(a, b)
+  *   def |+|(rhs: A): A = combine(rhs)
+  * }
+  *
+  * So combine does the same as our add function
+  */
+object SyntaxCatsGenericAddBalanceExample extends App with Data {
+  import cats.Semigroup
+  import cats.instances.int._
+  import cats.instances.map._
+  import cats.syntax.semigroup._
 
   implicit val moneySemigroup = new Semigroup[Money] {
     override def combine(x: Money, y: Money): Money =
       Money(x.euros + y.euros + ((x.cents + y.cents) / 100), (x.cents + y.cents) % 100)
   }
-  Semigroup[Int].combine(1, 2)
 
-  println(s"4. New balance ${Semigroup[Money].combine(balance, salary)}")
-  println(s"4. New balance ${Semigroup[Map[String,Money]].combine(balances, salaries)}")
-  println(s"4. New balance ${Semigroup[Map[String,Int]].combine(marbles, won)}")
-
-}
-
-
-object SemigroupEx5 extends App with Data {
-  import cats.syntax.semigroup._
-
+  println(marbles.combine(won))
   println(marbles |+| won)
-}
-
-object SemigroupEx6 extends App with Data {
-  import cats.syntax.semigroup._
-  import SemigroupEx4.moneySemigroup
-
   println(balances |+| salaries)
+
 }
-/*
-     New balance Money(1822,63)
-     New balance Map(John -> Money(987,85), Mo -> Money(4987,43), Sara -> Money(1435,88))
-[SG] New balance Money(1822,63)
-[SG] New balance Map(Sara -> Money(1435,88), Mo -> Money(4987,43), John -> Money(987,85))
- */
+
+
+//========================================================================================
+//========================================================================================
+//========================================================================================
+/**
+  * Just for running all examples
+  */
+object All extends App {
+  BalanceExample.main(Array.empty)
+  GenericAddBalanceExample.main(Array.empty)
+  ImplicitsGenericAddBalanceExample.main(Array.empty)
+  CatsGenericAddBalanceExample.main(Array.empty)
+  SyntaxCatsGenericAddBalanceExample.main(Array.empty)
+}
+
