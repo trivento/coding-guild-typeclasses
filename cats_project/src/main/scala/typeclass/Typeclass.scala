@@ -1,5 +1,7 @@
 package typeclass
 
+import generic.NamePrintingApp
+
 
 /** IMPOSSIBLE TO CHANGE - FROM EXTERNAL LIB **/
 case class Car(make: String, model: String) {
@@ -15,7 +17,11 @@ trait Data {
   val garfield = Cat("Garfield")
 }
 
-object Main extends App with Data {
+//========================================================================================
+//========================================================================================
+//========================================================================================
+
+object SimpleMethodsOverloading extends NamePrintingApp with Data {
   def kick(cat: Cat): String = cat.scream.toUpperCase
   def kick(car: Car): String = car.soundAlarm.toUpperCase
 
@@ -23,7 +29,19 @@ object Main extends App with Data {
   println(s"Kicking the cat: ${kick(garfield)}")
 }
 
+//========================================================================================
+//========================================================================================
+//========================================================================================
 
+/******************************************************************************
+  * Above code doens't scale
+  * Let's make it more generic
+  *
+  * Abstract by:
+  *   - define an interface with function for the type
+  *   - define function that takes type plus function to perform operation
+  *
+  ******************************************************************************/
 trait NoiseProducing[T] {
   def makeNoise(t: T): String
 }
@@ -36,22 +54,32 @@ object Implicits {
   }
 }
 
-object Main2 extends App with Data {
+object KickingMakesNoise extends NamePrintingApp with Data {
   import Implicits._
 
+  // Give me a T and a function so that I can let the T make noise
+  // This function is in NoiseProducing[T]
   def kickObject[T](obj: T)(implicit noiseProducing: NoiseProducing[T]): String =
     noiseProducing.makeNoise(obj).toUpperCase
 
-  def kickObjectAlternative[T : NoiseProducing](obj: T): String =
+  // Different syntax same result as above
+  def kickObjectAltSyntax[T : NoiseProducing](obj: T): String =
     implicitly[NoiseProducing[T]].makeNoise(obj).toUpperCase
 
-  println(s"Kicking the car: ${kickObject(bmw)}")
-  println(s"Kicking the cat: ${kickObjectAlternative(garfield)}")
+  println(s"Kicking the car: ${kickObject(bmw)(Implicits.carNoise)}")
+  println(s"Kicking the cat: ${kickObjectAltSyntax(garfield)}")
 }
 
-object Main3 extends App with Data {
+//========================================================================================
+//========================================================================================
+//========================================================================================
+
+/******************************************************************************
+  * Expand example with Option to show the power
+  ******************************************************************************/
+object MaybeKickingSomething extends NamePrintingApp with Data {
   import Implicits._
-  import Main2.kickObject
+  import KickingMakesNoise.kickObject
 
   val noCar: Option[Car] = None
   val myCar: Option[Car] = Some(bmw)
@@ -65,6 +93,16 @@ object Main3 extends App with Data {
 
   println(s"Kicking the non-existing car: ${kickObject(noCar)}")
   println(s"Kicking some car: ${kickObject(myCar)}")
+  println(s"Kicking the bmw again: ${kickObject(bmw)}")
 }
 
+//========================================================================================
+//========================================================================================
+//========================================================================================
+
+object All extends NamePrintingApp {
+  SimpleMethodsOverloading.main(Array.empty)
+  KickingMakesNoise.main(Array.empty)
+  MaybeKickingSomething.main(Array.empty)
+}
 
