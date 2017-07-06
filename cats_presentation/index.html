@@ -74,6 +74,54 @@ Process finished with exit code 0
               </code>
             </pre>
           </section>
+          <section>
+            <pre>
+              <code data-trim data-noescape>
+import simulacrum._
+
+@typeclass trait Semigroup[A] {
+  @op("|+|") def append(x: A, y: A): A
+}
+              </code>
+            </pre>
+            <pre>
+              <code style="font-size: 12px; line-height: 12px;" data-trim data-noescape>
+trait Semigroup[A] {
+  def append(x: A, y: A): A
+}
+
+object Semigroup {
+  def apply[A](implicit instance: Semigroup[A]): Semigroup[A] = instance
+
+  trait Ops[A] {
+    def typeClassInstance: Semigroup[A]
+    def self: A
+    def |+|(y: A): A = typeClassInstance.append(self, y)
+  }
+
+  trait ToSemigroupOps {
+    implicit def toSemigroupOps[A](target: A)(implicit tc: Semigroup[A]): Ops[A] = new Ops[A] {
+      val self = target
+      val typeClassInstance = tc
+    }
+  }
+
+  object nonInheritedOps extends ToSemigroupOps
+
+  trait AllOps[A] extends Ops[A] {
+    def typeClassInstance: Semigroup[A]
+  }
+
+  object ops {
+    implicit def toAllSemigroupOps[A](target: A)(implicit tc: Semigroup[A]): AllOps[A] = new AllOps[A] {
+      val self = target
+      val typeClassInstance = tc
+    }
+  }
+}
+              </code>
+            </pre>
+          </section>
         </section>
         <section>
           <h1>Core typeclasses</h1>
@@ -105,6 +153,7 @@ Process finished with exit code 0
         <section>
           <section>
             <h1>Monoid</h1>
+            <h4>Monoid extends the power of Semigroup by providing an additional empty value.</h4>
           </section>
         </section>
         <section>
