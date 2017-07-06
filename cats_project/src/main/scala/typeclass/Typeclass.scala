@@ -17,21 +17,21 @@ trait Data {
   val garfield = Cat("Garfield")
 }
 
-//========================================================================================
-//========================================================================================
-//========================================================================================
+//==============================================================================
+//==============================================================================
+//==============================================================================
 
 object SimpleMethodsOverloading extends NamePrintingApp with Data {
   def kick(cat: Cat): String = cat.scream.toUpperCase
   def kick(car: Car): String = car.soundAlarm.toUpperCase
 
-  println(s"Kicking the car: ${kick(bmw)}")
-  println(s"Kicking the cat: ${kick(garfield)}")
+  println(s"Kicking the BMW: ${kick(bmw)}")
+  println(s"Kicking Garfield: ${kick(garfield)}")
 }
 
-//========================================================================================
-//========================================================================================
-//========================================================================================
+//==============================================================================
+//==============================================================================
+//==============================================================================
 
 /******************************************************************************
   * Above code doens't scale
@@ -66,13 +66,13 @@ object KickingMakesNoise extends NamePrintingApp with Data {
   def kickObjectAltSyntax[T : NoiseProducing](obj: T): String =
     implicitly[NoiseProducing[T]].makeNoise(obj).toUpperCase
 
-  println(s"Kicking the car: ${kickObject(bmw)(Implicits.carNoise)}")
-  println(s"Kicking the cat: ${kickObjectAltSyntax(garfield)}")
+  println(s"Kicking the BMW: ${kickObject(bmw)(Implicits.carNoise)}")
+  println(s"Kicking Garfield: ${kickObjectAltSyntax(garfield)}")
 }
 
-//========================================================================================
-//========================================================================================
-//========================================================================================
+//==============================================================================
+//==============================================================================
+//==============================================================================
 
 /******************************************************************************
   * Expand example with Option to show the power
@@ -92,13 +92,14 @@ object MaybeKickingSomething extends NamePrintingApp with Data {
   }
 
   println(s"Kicking the non-existing car: ${kickObject(noCar)}")
-  println(s"Kicking some car: ${kickObject(myCar)}")
-  println(s"Kicking the bmw again: ${kickObject(bmw)}")
+  println(s"Kicking Some(BMW): ${kickObject(myCar)}")
+  println(s"Kicking Some(Garfield): ${kickObject(Option(garfield))}")
+  println(s"Kicking the BMW again: ${kickObject(bmw)}")
 }
 
-//========================================================================================
-//========================================================================================
-//========================================================================================
+//==============================================================================
+//==============================================================================
+//==============================================================================
 
 object All extends NamePrintingApp {
   SimpleMethodsOverloading.main(Array.empty)
