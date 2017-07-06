@@ -1,7 +1,6 @@
 package semigroup
 
 import generic.NamePrintingApp
-import semigroup.CatsGenericAddBalanceExample.{add, balance, balances, marbles, salaries, salary, won}
 
 /**
   * DOMAIN
@@ -46,11 +45,11 @@ trait Data {
 //==============================================================================
 //==============================================================================
 
-/**
+/*******************************************************************************
   * We want to add 2 money objects
   * We want to add 2 maps with money in it for each person
   * We want to add 2 maps with #marbles in it for each person
-  */
+  *****************************************************************************/
 object BalanceExample extends NamePrintingApp with Data {
 
   // Function to add 2 money objects to each other
@@ -157,7 +156,7 @@ object ImplicitsGenericAddBalanceExample extends NamePrintingApp with Data  {
   */
 
 
-/******************************************************************************
+/*******************************************************************************
   * What did we do so far?
   *
   *  - Defined an Addable interface
@@ -170,27 +169,27 @@ object ImplicitsGenericAddBalanceExample extends NamePrintingApp with Data  {
   *   def combine(x: A, y: A): A
   * }
   *
-  ******************************************************************************/
+  *****************************************************************************/
 object CatsGenericAddBalanceExample extends NamePrintingApp with Data  {
   import cats.Semigroup
 
-  /******************************************************************************
+  /*****************************************************************************
     * Let's define a Semigroup to combine (add) 2 money objects
-    ******************************************************************************/
+    ***************************************************************************/
   implicit val moneySemigroup = new Semigroup[Money] {
     override def combine(x: Money, y: Money): Money =
     Money(x.euros + y.euros + ((x.cents + y.cents) / 100), (x.cents + y.cents) % 100)
   }
 
-  /******************************************************************************
+  /*****************************************************************************
     * There are definitions for Int for free!
-    ******************************************************************************/
+    ***************************************************************************/
   import cats.instances.int._
   Semigroup[Int].combine(1, 2)
 
-  /******************************************************************************
+  /*****************************************************************************
     * And also for Map!
-    ******************************************************************************/
+    ***************************************************************************/
   import cats.instances.map._
 
   // before: def add[A: Addable](a: A, b: A): A = implicitly[Addable[A]].add(a, b)
@@ -206,7 +205,7 @@ object CatsGenericAddBalanceExample extends NamePrintingApp with Data  {
 //==============================================================================
 //==============================================================================
 
-/**
+/*******************************************************************************
   * It is also possible to use symbols
   * |+| is something like:
   *
@@ -216,7 +215,7 @@ object CatsGenericAddBalanceExample extends NamePrintingApp with Data  {
   * }
   *
   * So combine does the same as our add function
-  */
+  *****************************************************************************/
 object SyntaxCatsGenericAddBalanceExample extends NamePrintingApp with Data {
   import cats.Semigroup
   import cats.instances.int._

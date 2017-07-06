@@ -33,7 +33,7 @@ object SimpleMethodsOverloading extends NamePrintingApp with Data {
 //==============================================================================
 //==============================================================================
 
-/******************************************************************************
+/*******************************************************************************
   * Above code doens't scale
   * Let's make it more generic
   *
@@ -41,7 +41,7 @@ object SimpleMethodsOverloading extends NamePrintingApp with Data {
   *   - define an interface with function for the type
   *   - define function that takes type plus function to perform operation
   *
-  ******************************************************************************/
+  *****************************************************************************/
 trait NoiseProducing[T] {
   def makeNoise(t: T): String
 }
@@ -74,9 +74,9 @@ object KickingMakesNoise extends NamePrintingApp with Data {
 //==============================================================================
 //==============================================================================
 
-/******************************************************************************
+/*******************************************************************************
   * Expand example with Option to show the power
-  ******************************************************************************/
+  *****************************************************************************/
 object MaybeKickingSomething extends NamePrintingApp with Data {
   import Implicits._
   import KickingMakesNoise.kickObject
