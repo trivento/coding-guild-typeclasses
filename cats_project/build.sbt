@@ -20,3 +20,5 @@ libraryDependencies ++= (
   else
     Nil
 )
+
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.3" % "test"
