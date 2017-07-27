@@ -1,4 +1,4 @@
-package exercise1.exercise0.answers
+package exercise0.answers
 
 object Domain {
 
