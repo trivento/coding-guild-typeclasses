@@ -63,8 +63,8 @@ object BalanceExample extends NamePrintingApp with Data {
         acc + (name -> acc.get(name).map(add(_, money)).getOrElse(money))
     }
   }
-  def addMarbleMap(balances: Map[String, Int], salaries: Map[String, Int]): Map[String, Int] = {
-    balances.foldLeft(salaries){
+  def addMarbleMap(balances: Map[String, Int], marbles: Map[String, Int]): Map[String, Int] = {
+    balances.foldLeft(marbles){
       case (acc, (name, nrOfMarbles)) =>
         acc + (name -> acc.get(name).map(_ + nrOfMarbles).getOrElse(nrOfMarbles))
     }
