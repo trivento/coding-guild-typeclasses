@@ -6,9 +6,8 @@ class Test extends FlatSpec with Matchers {
   import Domain._
 
   it should "encode and decode an object correctly" in {
-    val person = Person("John")
-
-    // Decoder.decode(Encoder.encode(person)) should be(person)
-    throw new Exception("Uncomment the line above")
+    val john = Person("John")
+    val encodedThenDecoded: Person = Decoder.decode(Encoder.encode(john))
+    encodedThenDecoded shouldBe john
   }
 }

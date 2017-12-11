@@ -1,6 +1,8 @@
 package exercise0.exercise
 
-object Domain {
+import util.MissingImplicitsRuntimeException
+
+object Domain extends MissingImplicitsRuntimeException {
 
   object Encoder {
     def encode[A, B](obj: A)(implicit encoder: Encoder[A, B]): B = encoder.encode(obj)
@@ -19,4 +21,7 @@ object Domain {
   }
 
   case class Person(name: String)
+
+  // TODO: Implement a String Encoder + Decoder for Person
+  // (It suffices to just 'serialize' its name attribute)
 }

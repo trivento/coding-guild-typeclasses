@@ -1,4 +1,4 @@
-package exercise0.answers
+package exercise0.answer
 
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -6,8 +6,8 @@ class Test extends FlatSpec with Matchers {
   import Domain._
 
   it should "encode and decode an object correctly" in {
-    val person = Person("John")
-
-    Decoder.decode(Encoder.encode(person)) should be(person)
+    val john = Person("John")
+    val encodedThenDecoded: Person = Decoder.decode(Encoder.encode(john))
+    encodedThenDecoded shouldBe john
   }
 }

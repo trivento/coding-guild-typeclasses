@@ -13,7 +13,7 @@ import cats.syntax.traverse._
 
 object Domain {
 
-  /* Our good old domain of some previous exercises */
+  /* Our good old domain of some previous util */
 
   type Product = String
   type Price = Double
