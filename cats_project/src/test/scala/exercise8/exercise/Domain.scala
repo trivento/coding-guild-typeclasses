@@ -22,4 +22,11 @@ object Domain {
   // Converter admits a Profunctor instance, because we have seen that Encoder and Decoder admit a Contravariant and
   // Functor respectively.
   implicit val converterProfunctor: Profunctor[Converter] = ???
+
+
+  case class Price(cents: Int)
+  sealed trait Coin
+  case object Bitcoin extends Coin
+  case object Ethereum extends Coin
+  case object Litecoin extends Coin
 }

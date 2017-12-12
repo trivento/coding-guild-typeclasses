@@ -25,4 +25,10 @@ object Domain {
     override def dimap[A, B, C, D](fab: Converter[A, B])(f: C ⇒ A)(g: B ⇒ D): Converter[C, D] =
       (c: C) => g(fab.convert(f(c)))
   }
+
+  case class Price(cents: Int)
+  sealed trait Coin
+  case object Bitcoin extends Coin
+  case object Ethereum extends Coin
+  case object Litecoin extends Coin
 }
